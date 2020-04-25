@@ -1,7 +1,7 @@
 {
-  "name": "webpack-demo",
+  "name": "flipping-game",
   "version": "1.0.0",
-  "description": "",
+  "description": "A game inspired by Project Euler Problem #459",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --open",
