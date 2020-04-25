@@ -33,7 +33,7 @@ export default class FlippingGame {
         this.ctx.closePath()
         this.ctx.stroke()
 
-        // Draw the vertical lines along the x-axis
+        // Draw the vertical lines perpendicular to the x-axis
         for (let vx = 0; vx < this.config.n; vx++) {
             this.ctx.beginPath()
             this.ctx.moveTo(vx * cellSize, 0)
@@ -42,7 +42,7 @@ export default class FlippingGame {
             this.ctx.stroke()
         }
 
-        // Draw the horizontal lines along the y-axis
+        // Draw the horizontal lines perpendicular to the y-axis
         for (let hy = 0; hy < this.config.n; hy++) {
             this.ctx.beginPath()
             this.ctx.moveTo(0, hy * cellSize)
