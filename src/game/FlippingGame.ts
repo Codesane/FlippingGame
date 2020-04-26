@@ -33,6 +33,7 @@ export default class FlippingGame {
         }
 
         this._pieces.flipRegion(region)
+        this.removeCurrentSelection()
 
         this.draw()
     }
@@ -69,16 +70,6 @@ export default class FlippingGame {
 
         this._ctx.fillStyle = this.config.colors.board.background
         this._ctx.fillRect(0, 0, width, height)
-
-        // Draw the grid
-        this._ctx.beginPath()
-        this._ctx.moveTo(0, 0)
-        this._ctx.lineTo(width, 0)
-        this._ctx.lineTo(width, height)
-        this._ctx.lineTo(0, height)
-        this._ctx.lineTo(0, 0)
-        this._ctx.closePath()
-        this._ctx.stroke()
 
         // Draw the vertical lines perpendicular to the x-axis
         for (let vx = 0; vx < this.config.n; vx++) {
@@ -167,6 +158,10 @@ export default class FlippingGame {
 
         this._dragSelectionStart = null
         this.draw()
+    }
+
+    private removeCurrentSelection() {
+        this._currentSelectedRegion = null
     }
 
     private updateSelection(e: MouseEvent) {
