@@ -30,11 +30,11 @@ function initGame() {
     const flipSelectedRegionBtn = document.getElementById("select-region-btn") as HTMLButtonElement
 
     flipSelectedRegionBtn.onclick = () => {
-        game.flipPieces(game.getCurrentSelectedRegion()!)
+        game.flipPieces(game.currentSelectedRegion!)
     }
 
     game.onChangeSelectedRegion((region) => {
-        const result = new CanFlipRegion().check(game.getPieces(), region)
+        const result = new CanFlipRegion().check(game.pieces, region)
 
         const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
         const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
