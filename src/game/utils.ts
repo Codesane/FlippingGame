@@ -26,3 +26,11 @@ export function cellAtCoordinates(cellSize: number, x: number, y: number): Cell 
         y: Math.floor(y / cellSize)
     }
 }
+
+export function getRegionWidth(region: RectangularRegion): number {
+    return region.bottomRight.x - region.topLeft.x + 1
+}
+
+export function getRegionHeight(region: RectangularRegion): number {
+    return region.bottomRight.y - region.topLeft.y + 1
+}

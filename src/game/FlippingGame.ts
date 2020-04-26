@@ -112,16 +112,16 @@ export default class FlippingGame {
 
     private drawCurrentSelection() {
         if (!this.selectedRegion) return
-        const cellSize = this.config.sizes.cell
 
-        const { topLeft, bottomRight } = this.selectedRegion
+        const cellSize = this.config.sizes.cell
+        const region = this.selectedRegion
 
         this.ctx.fillStyle = this.config.colors.board.selection
         this.ctx.fillRect(
-            topLeft.x * cellSize,
-            topLeft.y * cellSize,
-            ((bottomRight.x - topLeft.x) + 1) * cellSize,
-            ((bottomRight.y - topLeft.y) + 1) * cellSize
+            region.topLeft.x * cellSize,
+            region.topLeft.y * cellSize,
+            Utils.getRegionWidth(region) * cellSize,
+            Utils.getRegionHeight(region) * cellSize
         )
     }
 
