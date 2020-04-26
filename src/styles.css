@@ -1,0 +1,78 @@
+html, body, #main {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+#main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#welcome-screen {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+#welcome-screen .welcome-text-container h2 {
+    text-transform: uppercase;
+}
+
+#welcome-screen .welcome-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#welcome-screen .welcome-text-container small {
+    font-size: .85rem;
+    color: #738694;
+}
+
+#welcome-screen a:link, a:visited, a:hover, a:active {
+    color: #2B95D6;
+    text-decoration: none;
+}
+
+#welcome-screen .header {
+    color: #293742;
+    font-size: 3rem;
+    text-align: center;
+}
+
+#welcome-screen button {
+    border: 0;
+    font-weight: bold;
+    height: 3rem;
+    width: 16rem;
+    background-color: #2B95D6;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    color: #F5F8FA;
+    border-radius: 2px;
+}
+
+#welcome-screen button:hover {
+    cursor: pointer;
+    background-color: #48AFF0;
+}
+
+#welcome-screen button:active {
+    background-color: #137CBD;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#canvas {
+    /*margin: 20px 0 0 20px;*/
+}
+
+
+
+

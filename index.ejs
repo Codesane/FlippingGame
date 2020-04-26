@@ -2,26 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- TODO: Prune this list when we are satisfied -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet">
     <title>Title</title>
-    <style>
-        html {
-            background: #fff;
-        }
-        #canvas {
-            margin: 20px 0 0 20px;
-        }
-    </style>
 </head>
 <body>
-    <div id="main">
-        <input id="select-region-btn" type="button" value="Select Region" />
-        <br />
-        <canvas id="canvas" width="1000" height="1000"></canvas>
-        <ul>
-            <li id="rule-TopRightPieceMustNotBeFlipped">The top-right corner must not be flipped</li>
-            <li id="rule-WidthMustBeSquare">The width must be a perfect square (1, 4, 9, 16, ...)</li>
-            <li id="rule-HeightMustBeTriangular">The height must be triangular (1, 3, 6, 10, ...)</li>
-        </ul>
-    </div>
+    <div id="main"></div>
 </body>
+<template id="welcome-screen-template">
+    <div id="welcome-screen">
+        <div class="welcome-text-container">
+            <h2 class="header">Flipping Game!</h2>
+            <small>A game inspired by a problem from Project Euler</small>
+            <br />
+            <br />
+            <a href="https://projecteuler.net/problem=459" target="_blank">Project Euler Problem #459</a>
+        </div>
+        <button id="new-game">New Game</button>
+    </div>
+</template>
+<template id="share-link-screen-template">
+    <h2>Share this link!</h2>
+</template>
+<template id="game-screen-template">
+    <input id="select-region-btn" type="button" value="Select Region" />
+    <br />
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <ul>
+        <li id="rule-TopRightPieceMustNotBeFlipped">The top-right corner must not be flipped</li>
+        <li id="rule-WidthMustBeSquare">The width must be a perfect square (1, 4, 9, 16, ...)</li>
+        <li id="rule-HeightMustBeTriangular">The height must be triangular (1, 3, 6, 10, ...)</li>
+    </ul>
+</template>
 </html>
