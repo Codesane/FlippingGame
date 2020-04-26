@@ -34,7 +34,7 @@ function initGame() {
     }
 
     game.onChangeSelectedRegion((region) => {
-        const ruleBreaks = new CanFlipRegion().check(game.pieces, region)
+        const ruleBreaks = new CanFlipRegion(game.pieces, region).check()
 
         const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
         const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!

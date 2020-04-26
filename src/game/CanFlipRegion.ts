@@ -6,12 +6,12 @@ import * as Utils from "./utils"
 
 export enum RuleBreaks {
     TopRightPieceMustNotBeFlipped = "TopRightPieceMustNotBeFlipped",
-    WidthMustBeSquare = "WidthMustBeSquare",
-    HeightMustBeTriangular = "HeightMustBeTriangular",
+    WidthMustBeSquare             = "WidthMustBeSquare",
+    HeightMustBeTriangular        = "HeightMustBeTriangular",
 }
 
 export interface ICanFlipRegion {
-    check(pieces: PieceMap, region: RectangularRegion): RuleBreaks[]
+    check(): RuleBreaks[]
 }
 
 /**
@@ -21,39 +21,46 @@ export interface ICanFlipRegion {
  * 3. The region height must be a triangular number (1, 3, 6, 10, ...)
  * */
 export default class CanFlipRegion implements ICanFlipRegion {
-    check(pieces: PieceMap, region: RectangularRegion): RuleBreaks[] {
+
+    constructor(
+        private readonly pieces: PieceMap,
+        private readonly region: RectangularRegion
+    ) {
+    }
+
+    check(): RuleBreaks[] {
         const brokenRules: RuleBreaks[] = []
 
-        if (CanFlipRegion.isTopRightPieceFlipped(pieces, region)) {
+        if (this.isTopRightPieceFlipped()) {
             brokenRules.push(RuleBreaks.TopRightPieceMustNotBeFlipped)
         }
 
-        if (!CanFlipRegion.isWidthPerfectSquare(region)) {
+        if (!this.isWidthPerfectSquare()) {
             brokenRules.push(RuleBreaks.WidthMustBeSquare)
         }
 
-        if (!CanFlipRegion.isHeightTriangular(region)) {
+        if (!this.isHeightTriangular()) {
             brokenRules.push(RuleBreaks.HeightMustBeTriangular)
         }
 
         return brokenRules
     }
 
-    private static isTopRightPieceFlipped(pieces: PieceMap, region: RectangularRegion) {
+    private isTopRightPieceFlipped() {
         const topRightCell: Cell = {
-            x: region.bottomRight.x,
-            y: region.topLeft.y
+            x: this.region.bottomRight.x,
+            y: this.region.topLeft.y
         }
 
-        return pieces.getPiece(topRightCell).flipped
+        return this.pieces.getPiece(topRightCell).flipped
     }
 
-    private static isWidthPerfectSquare(region: RectangularRegion) {
-        return Utils.getRegionWidth(region) != 2 && Number.isInteger(Math.sqrt(Utils.getRegionWidth(region)))
+    private isWidthPerfectSquare() {
+        return Utils.getRegionWidth(this.region) != 2 && Number.isInteger(Math.sqrt(Utils.getRegionWidth(this.region)))
     }
 
-    private static isHeightTriangular(region: RectangularRegion) {
-        const height = Utils.getRegionHeight(region)
+    private isHeightTriangular() {
+        const height = Utils.getRegionHeight(this.region)
 
         return Number.isInteger(Math.sqrt(8 * height + 1))
     }

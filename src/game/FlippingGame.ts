@@ -27,6 +27,11 @@ export default class FlippingGame {
     }
 
     flipPieces(region: RectangularRegion) {
+        const ruleBreaks = new CanFlipRegion(this._pieces, region).check()
+        if (ruleBreaks.length !== 0) {
+            throw new Error(`Can't flip region because it breaks the following rules: '${ruleBreaks.join(", ")}'`)
+        }
+
         this._pieces.flipRegion(region)
 
         this.draw()
@@ -132,7 +137,7 @@ export default class FlippingGame {
             invalidSelection: invalidSelectionColor
         } = this.config.colors.board
 
-        const isSelectionValid = new CanFlipRegion().check(this._pieces, region).length === 0
+        const isSelectionValid = new CanFlipRegion(this._pieces, region).check().length === 0
 
         this._ctx.fillStyle = isSelectionValid ? validSelectionColor : invalidSelectionColor
 
