@@ -7,6 +7,32 @@ html, body, #main {
     height: 100%;
 }
 
+h1, h2, h3 {
+    color: #293742;
+}
+
+button {
+    border: 0;
+    font-weight: bold;
+    height: 3rem;
+    width: 16rem;
+    background-color: #2B95D6;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    color: #F5F8FA;
+    border-radius: 2px;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #48AFF0;
+}
+
+button:active {
+    background-color: #137CBD;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
 #main {
     display: flex;
     justify-content: center;
@@ -42,31 +68,44 @@ html, body, #main {
 }
 
 #welcome-screen .header {
-    color: #293742;
     font-size: 3rem;
     text-align: center;
 }
 
-#welcome-screen button {
-    border: 0;
-    font-weight: bold;
-    height: 3rem;
-    width: 16rem;
-    background-color: #2B95D6;
-    letter-spacing: .1rem;
-    text-transform: uppercase;
-    color: #F5F8FA;
+#welcome-screen .new-game-options-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 9rem;
+}
+
+/* ShareLinkScreen */
+#share-link-screen {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+
+/* PasteLinkScreen */
+#paste-link-screen {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#paste-link-screen input[type=text] {
+    border: 1px solid #ccc;
     border-radius: 2px;
-}
-
-#welcome-screen button:hover {
-    cursor: pointer;
-    background-color: #48AFF0;
-}
-
-#welcome-screen button:active {
-    background-color: #137CBD;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 45rem;
+    font-size: 2em;
+    text-align: center;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+    background: #F5F8FA;
 }
 
 #canvas {
