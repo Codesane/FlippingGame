@@ -1,5 +1,5 @@
 import { Cell, Config, RectangularRegion } from "./types"
-import CanFlipRegion, { CanFlipRegionResult } from "./CanFlipRegion"
+import CanFlipRegion from "./CanFlipRegion"
 import PieceMap from "./PieceMap"
 
 import * as Utils from "./utils"
@@ -132,7 +132,7 @@ export default class FlippingGame {
             invalidSelection: invalidSelectionColor
         } = this.config.colors.board
 
-        const isSelectionValid = new CanFlipRegion().check(this._pieces, region) === CanFlipRegionResult.Yes_CanFlip
+        const isSelectionValid = new CanFlipRegion().check(this._pieces, region).length === 0
 
         this._ctx.fillStyle = isSelectionValid ? validSelectionColor : invalidSelectionColor
 

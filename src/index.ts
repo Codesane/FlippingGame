@@ -1,5 +1,5 @@
 import FlippingGame from "./game/FlippingGame"
-import CanFlipRegion, {CanFlipRegionResult} from "./game/CanFlipRegion";
+import CanFlipRegion, {RuleBreaks} from "./game/CanFlipRegion";
 
 
 function initGame() {
@@ -34,7 +34,7 @@ function initGame() {
     }
 
     game.onChangeSelectedRegion((region) => {
-        const result = new CanFlipRegion().check(game.pieces, region)
+        const ruleBreaks = new CanFlipRegion().check(game.pieces, region)
 
         const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
         const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
@@ -44,16 +44,16 @@ function initGame() {
         ruleWidthMustBeSquare.style.color = "#000"
         ruleHeightMustBeTriangular.style.color = "#000"
 
-        switch (result) {
-            case CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped:
-                ruleTopRightPieceMustNotBeFlippedElement.style.color = "red"
-                break
-            case CanFlipRegionResult.No_WidthMustBeSquare:
-                ruleWidthMustBeSquare.style.color = "red"
-                break
-            case CanFlipRegionResult.No_HeightMustBeTriangular:
-                ruleHeightMustBeTriangular.style.color = "red"
-                break
+        if (ruleBreaks.includes(RuleBreaks.TopRightPieceMustNotBeFlipped)) {
+            ruleTopRightPieceMustNotBeFlippedElement.style.color = "red"
+        }
+
+        if (ruleBreaks.includes(RuleBreaks.WidthMustBeSquare)) {
+            ruleWidthMustBeSquare.style.color = "red"
+        }
+
+        if (ruleBreaks.includes(RuleBreaks.HeightMustBeTriangular)) {
+            ruleHeightMustBeTriangular.style.color = "red"
         }
     })
 }

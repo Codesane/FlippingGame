@@ -4,15 +4,14 @@ import PieceMap from "./PieceMap"
 
 import * as Utils from "./utils"
 
-export enum CanFlipRegionResult {
-    Yes_CanFlip = "Yes_CanFlip",
-    No_TopRightPieceMustNotBeFlipped = "No_TopRightPieceMustNotBeFlipped",
-    No_WidthMustBeSquare = "No_WidthMustBeSquare",
-    No_HeightMustBeTriangular = "No_HeightMustBeTriangular",
+export enum RuleBreaks {
+    TopRightPieceMustNotBeFlipped = "TopRightPieceMustNotBeFlipped",
+    WidthMustBeSquare = "WidthMustBeSquare",
+    HeightMustBeTriangular = "HeightMustBeTriangular",
 }
 
 export interface ICanFlipRegion {
-    check(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult
+    check(pieces: PieceMap, region: RectangularRegion): RuleBreaks[]
 }
 
 /**
@@ -22,20 +21,22 @@ export interface ICanFlipRegion {
  * 3. The region height must be a triangular number (1, 3, 6, 10, ...)
  * */
 export default class CanFlipRegion implements ICanFlipRegion {
-    check(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult {
+    check(pieces: PieceMap, region: RectangularRegion): RuleBreaks[] {
+        const brokenRules: RuleBreaks[] = []
+
         if (CanFlipRegion.isTopRightPieceFlipped(pieces, region)) {
-            return CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped
+            brokenRules.push(RuleBreaks.TopRightPieceMustNotBeFlipped)
         }
 
         if (!CanFlipRegion.isWidthPerfectSquare(region)) {
-            return CanFlipRegionResult.No_WidthMustBeSquare
+            brokenRules.push(RuleBreaks.WidthMustBeSquare)
         }
 
         if (!CanFlipRegion.isHeightTriangular(region)) {
-            return CanFlipRegionResult.No_HeightMustBeTriangular
+            brokenRules.push(RuleBreaks.HeightMustBeTriangular)
         }
 
-        return CanFlipRegionResult.Yes_CanFlip
+        return brokenRules
     }
 
     private static isTopRightPieceFlipped(pieces: PieceMap, region: RectangularRegion) {
