@@ -2,7 +2,8 @@
 interface Colors {
     board: {
         background: string
-        selection: string
+        validSelection: string
+        invalidSelection: string
     },
     pieces: {
         default: string

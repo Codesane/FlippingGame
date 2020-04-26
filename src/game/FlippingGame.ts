@@ -1,14 +1,17 @@
+import { Cell, Config, RectangularRegion } from "./types"
+import CanFlipRegion, { CanFlipRegionResult } from "./CanFlipRegion"
 import PieceMap from "./PieceMap"
 
-import { Cell, Config, RectangularRegion } from "./types"
-
 import * as Utils from "./utils"
+
+export type OnChangeSelectedRegion = (region: RectangularRegion) => void
 
 export default class FlippingGame {
     private readonly ctx: CanvasRenderingContext2D
     private readonly pieces: PieceMap
 
     private selectedRegion: RectangularRegion | null = null
+    private onChangeSelectedRegionCb: OnChangeSelectedRegion | null = null
 
     private dragSelectionStart: Cell | null = null
 
@@ -36,6 +39,14 @@ export default class FlippingGame {
 
     getCurrentSelectedRegion(): RectangularRegion | null {
         return this.selectedRegion
+    }
+
+    getPieces(): PieceMap {
+        return this.pieces
+    }
+
+    onChangeSelectedRegion(callback: OnChangeSelectedRegion) {
+        this.onChangeSelectedRegionCb = callback
     }
 
     private draw() {
@@ -116,7 +127,15 @@ export default class FlippingGame {
         const cellSize = this.config.sizes.cell
         const region = this.selectedRegion
 
-        this.ctx.fillStyle = this.config.colors.board.selection
+        const {
+            validSelection: validSelectionColor,
+            invalidSelection: invalidSelectionColor
+        } = this.config.colors.board
+
+        const isSelectionValid = new CanFlipRegion().check(this.pieces, region) === CanFlipRegionResult.Yes_CanFlip
+
+        this.ctx.fillStyle = isSelectionValid ? validSelectionColor : invalidSelectionColor
+
         this.ctx.fillRect(
             region.topLeft.x * cellSize,
             region.topLeft.y * cellSize,
@@ -152,6 +171,8 @@ export default class FlippingGame {
         if (this.dragSelectionStart) {
             const dragSelectionEnd = Utils.cellAtCoordinates(this.config.sizes.cell, canvasX, canvasY)
             this.selectedRegion = Utils.getRegionBetweenCells(this.dragSelectionStart!, dragSelectionEnd)
+
+            this.onChangeSelectedRegionCb && this.onChangeSelectedRegionCb(this.selectedRegion)
         }
     }
 }

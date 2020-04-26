@@ -12,17 +12,17 @@ export enum CanFlipRegionResult {
 }
 
 export interface ICanFlipRegion {
-    canFlipRegion(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult
+    check(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult
 }
 
 /**
  * These are the rules
  * 1. The top-right piece in the region must NOT be flipped.
- * 2. The region width must be square (1, 4, 9, 16, ...)
+ * 2. The region width must be perfectly square (1, 4, 9, 16, ...)
  * 3. The region height must be a triangular number (1, 3, 6, 10, ...)
  * */
 export default class CanFlipRegion implements ICanFlipRegion {
-    canFlipRegion(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult {
+    check(pieces: PieceMap, region: RectangularRegion): CanFlipRegionResult {
         if (CanFlipRegion.isTopRightPieceFlipped(pieces, region)) {
             return CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped
         }

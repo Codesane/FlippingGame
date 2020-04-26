@@ -32,13 +32,13 @@ describe("CanFlipRegion", () => {
             })
 
             it("should return Yes_CanFlip when the piece is not flipped", () => {
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.Yes_CanFlip)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.Yes_CanFlip)
             })
 
             it("should return No_TopRightPieceMustNotBeFlipped when piece is flipped", () => {
                 pieces.flipPiece({ x: 0, y: 0 })
 
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped)
             })
         })
 
@@ -49,13 +49,13 @@ describe("CanFlipRegion", () => {
             })
 
             it("should return Yes_CanFlip when the top-right piece is not flipped", () => {
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.Yes_CanFlip)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.Yes_CanFlip)
             })
 
             it("should return No_TopRightPieceMustNotBeFlipped when the top-right piece is flipped", () => {
                 pieces.flipPiece({ x: 3, y: 0 })
 
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.No_TopRightPieceMustNotBeFlipped)
             })
         })
 
@@ -63,12 +63,12 @@ describe("CanFlipRegion", () => {
 
             it("should return No_WidthMustBeSquare v1", () => {
                 const region = makeRegion(0, 0, 2, 1)
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.No_WidthMustBeSquare)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.No_WidthMustBeSquare)
             })
 
             it("should return No_WidthMustBeSquare v2", () => {
                 const region = makeRegion(0, 0, 5, 1)
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.No_WidthMustBeSquare)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.No_WidthMustBeSquare)
             })
         })
 
@@ -79,7 +79,7 @@ describe("CanFlipRegion", () => {
             })
 
             it("should return No_HeightMustBeTriangular", () => {
-                expect(new CanFlipRegion().canFlipRegion(pieces, region)).toEqual(CanFlipRegionResult.No_HeightMustBeTriangular)
+                expect(new CanFlipRegion().check(pieces, region)).toEqual(CanFlipRegionResult.No_HeightMustBeTriangular)
             })
         })
     })
