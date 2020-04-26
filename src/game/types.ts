@@ -1,16 +1,20 @@
 
 interface Colors {
-    board: string,
+    board: {
+        background: string
+        selection: string
+    },
     pieces: {
-        default: "#ffffff",
-        flipped: "#000000"
+        default: string
+        selected: string
+        flipped: string
     }
 }
 
 interface Sizes {
-    cell: 100,
-    pieceRadius: 90,
-    border: 2
+    cell: number
+    pieceDiameter: number
+    border: number
 }
 
 export interface Config {
@@ -25,9 +29,9 @@ export interface Cell {
     y: number
 }
 
-export interface Region {
+export interface RectangularRegion {
     topLeft: Cell
-    topRight: Cell
+    bottomRight: Cell
 }
 
 export interface Piece {

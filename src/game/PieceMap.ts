@@ -1,4 +1,4 @@
-import { Cell, Piece } from "./types"
+import {Cell, Piece, RectangularRegion} from "./types"
 
 export default class PieceMap {
     private readonly pieces: Piece[][]
@@ -26,6 +26,14 @@ export default class PieceMap {
     flipPiece(cell: Cell) {
         this.assertIsWithinBounds(cell)
         this.pieces[cell.y][cell.x].flipped = !this.getPiece(cell).flipped
+    }
+
+    flipRegion(region: RectangularRegion) {
+        for (let y = region.topLeft.y; y <= region.bottomRight.y; y++) {
+            for (let x = region.topLeft.x; x <= region.bottomRight.x; x++) {
+                this.flipPiece({ x, y })
+            }
+        }
     }
 
     private assertIsWithinBounds(cell: Cell) {
