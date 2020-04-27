@@ -80,24 +80,27 @@ button:active {
 }
 
 /* ShareLinkScreen */
-#share-link-screen {
+#create-game-screen {
+    height: 600px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     flex-direction: column;
 }
 
-
-/* PasteLinkScreen */
-#paste-link-screen {
-    height: 400px;
+#join-game-screen {
+    height: 600px;
     display: flex;
     align-items: center;
-    flex-direction: column;
     justify-content: space-evenly;
+    flex-direction: column;
 }
 
-#paste-link-screen input[type=text] {
+#join-game-screen #my-code-input-container {
+    display: none;
+}
+
+input[type=text] {
     border: 1px solid #ccc;
     border-radius: 2px;
     padding: 15px;

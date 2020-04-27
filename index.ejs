@@ -24,19 +24,33 @@
         </div>
     </div>
 </template>
-<template id="share-link-screen-template">
-    <div id="share-link-screen">
-        <h2>Share this connection code with your opponent</h2>
-        <h1 id="share-link">H82374S</h1>
-    </div>
-</template>
-<template id="paste-link-screen-template">
-    <div id="paste-link-screen">
-        <h2>Paste the link from your friend below</h2>
-        <input type="text" />
+<template id="create-game-screen-template">
+    <div id="create-game-screen">
+        <h2>Share this code with your friend</h2>
+        <input id="my-code-input" type="text" readonly />
+        <h2>Paste the code from your friend below</h2>
+        <input id="friend-code-input" type="text" />
         <button id="submit-code">Play!</button>
     </div>
 </template>
+
+<template id="join-game-screen-template">
+    <div id="join-game-screen">
+        <div>
+            <h2>Paste the code from your friend below</h2>
+            <input id="join-game-friend-code-input" type="text"/>
+        </div>
+        <button id="submit-friend-code-button">Submit Code</button>
+        <div id="my-code-input-container">
+            <h2>Send the below code to your friend</h2>
+            <input id="my-code-input" type="text" readonly />
+        </div>
+    </div>
+    <template id="send-your-code">
+        <h2>join-game-screen</h2>
+    </template>
+</template>
+
 <template id="game-screen-template">
     <input id="select-region-btn" type="button" value="Select Region" />
     <br />

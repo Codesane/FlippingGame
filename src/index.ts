@@ -1,16 +1,15 @@
 import ScreenController from "./ScreenController"
 
 import WelcomeScreen from "./screens/WelcomeScreen"
-import ShareLinkScreen from "./screens/ShareLinkScreen"
-import PasteLinkScreen from "./screens/PasteLinkScreen"
-import GameScreen from "./screens/GameScreen"
+import CreateGameScreen from "./screens/CreateGameScreen"
+import JoinGameScreen from "./screens/JoinGameScreen"
+
+import SimplePeer, {SignalData} from "simple-peer"
 
 import "./styles.css"
 
-
 window.onload = function() {
     const screenContainer = document.getElementById("main")!
-    const gameScreen = new GameScreen()
 
     const controller = new ScreenController(screenContainer)
 
@@ -18,25 +17,53 @@ window.onload = function() {
         const welcomeScreen = new WelcomeScreen()
         controller.showScreen(welcomeScreen)
 
-        welcomeScreen.onCreateNewGame(showShareLinkScreen)
-        welcomeScreen.onJoinGame(showPasteLinkScreen)
+        welcomeScreen.onCreateNewGame(showCreateGameScreen)
+        welcomeScreen.onJoinGame(showJoinGameScreen)
     }
 
-    function showShareLinkScreen() {
-        const shareLinkScreen = new ShareLinkScreen("awesome-link")
-        controller.showScreen(shareLinkScreen)
+    async function showCreateGameScreen() {
+        const peer = new SimplePeer({ initiator: true, trickle: false })
+        peer.on("connect", () => {
+            console.log("We are connected")
+        })
+
+        const code = await getEncodedSignal(peer)
+        const createGameScreen = new CreateGameScreen(code)
+        controller.showScreen(createGameScreen)
+
+        createGameScreen.onSubmitFriendCode((friendCode) => {
+            applyEncodedSignal(peer, friendCode)
+        })
     }
 
-    function showPasteLinkScreen() {
-        const pasteLinkScreen = new PasteLinkScreen()
-        controller.showScreen(pasteLinkScreen)
+    function showJoinGameScreen() {
+        const peer = new SimplePeer()
+        peer.on("connect", () => {
+            console.log("Friend connected")
+        })
 
-        pasteLinkScreen.onPasteLink((link) => {
-            // Try connect to the other
+        const joinGameScreen = new JoinGameScreen()
+        controller.showScreen(joinGameScreen)
+
+        joinGameScreen.onSubmitFriendCode(async (friendCode) => {
+            applyEncodedSignal(peer, friendCode)
+
+            const signal = await getEncodedSignal(peer)
+            joinGameScreen.displayMyGameCode(signal)
         })
     }
 
     showWelcomeScreen()
 }
 
+export async function getEncodedSignal(peer: SimplePeer.Instance): Promise<string> {
+    return new Promise((resolve, reject) => {
+        peer.on("signal", data => {
+            resolve(btoa(JSON.stringify(data)))
+        })
+    })
+}
 
+export function applyEncodedSignal(peer: SimplePeer.Instance, encodedSignal: string) {
+    peer.signal(JSON.parse(atob(encodedSignal)))
+}
