@@ -7,10 +7,12 @@ interface IMessage {
 }
 
 export type OnPlayerChangeSelectedRegion = (region: RectangularRegion) => void
+export type OnPlayerFlipPieces = (region: RectangularRegion) => void
 
 export default class OnlineGameSession {
 
     private onPlayerChangeSelectedRegionCallback: OnPlayerChangeSelectedRegion | null = null
+    private onPlayerFlipPiecesCallback: OnPlayerFlipPieces | null = null
 
     constructor(
         private readonly peer: SimplePeer.Instance,
@@ -26,8 +28,19 @@ export default class OnlineGameSession {
         })
     }
 
+    sendPiecesFlippedEvent(region: RectangularRegion) {
+        this.sendMessage({
+            type: "PiecesFlippedEvent",
+            body: region
+        })
+    }
+
     onPlayerChangeSelectedRegion = (callback: OnPlayerChangeSelectedRegion) => {
         this.onPlayerChangeSelectedRegionCallback = callback
+    }
+
+    onPlayerFlipPieces = (callback: OnPlayerFlipPieces) => {
+        this.onPlayerFlipPiecesCallback = callback
     }
 
     private onReceiveMessage = (data: any) => {
@@ -36,9 +49,20 @@ export default class OnlineGameSession {
 
         switch(message.type) {
             case "RegionSelectedEvent":
-                this.onPlayerChangeSelectedRegionCallback && this.onPlayerChangeSelectedRegionCallback(message.body)
+                this.handleRegionSelectedEvent(message)
+                break
+            case "PiecesFlippedEvent":
+                this.handlePiecesFlippedEvent(message)
                 break
         }
+    }
+
+    private handleRegionSelectedEvent(message: IMessage) {
+        this.onPlayerChangeSelectedRegionCallback && this.onPlayerChangeSelectedRegionCallback(message.body)
+    }
+
+    private handlePiecesFlippedEvent(message: IMessage) {
+        this.onPlayerFlipPiecesCallback && this.onPlayerFlipPiecesCallback(message.body)
     }
 
     private sendMessage({ type, body }: IMessage) {

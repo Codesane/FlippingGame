@@ -2,9 +2,7 @@ import IScreen from "./IScreen"
 import FlippingGame from "../game/FlippingGame"
 import CanFlipRegion, { RuleBreaks } from "../game/CanFlipRegion"
 
-import OnlineGameSession from "../OnlineGameSession"
-
-import {Config, RectangularRegion} from "../game/types"
+import { Config, RectangularRegion } from "../game/types"
 
 const config: Config = {
     n: 10,
@@ -28,13 +26,13 @@ const config: Config = {
 }
 
 export type OnRegionSelected = (region: RectangularRegion) => void
-export type OnFlipRegion = (region: RectangularRegion) => void
+export type OnFlipPieces = (region: RectangularRegion) => void
 
 export default class GameScreen implements IScreen {
     private readonly _templateId: string = "game-screen-template"
 
     private _onRegionSelectedCallback: OnRegionSelected | null = null
-    private _onFlipRegionCallback: OnFlipRegion | null = null
+    private _onFlipRegionCallback: OnFlipPieces | null = null
 
     private _game!: FlippingGame
 
@@ -60,8 +58,12 @@ export default class GameScreen implements IScreen {
         this._game.selectRegion(region)
     }
 
-    onFlipRegion(callback: OnFlipRegion) {
+    onFlipPieces(callback: OnFlipPieces) {
         this._onFlipRegionCallback = callback
+    }
+
+    flipPieces(region: RectangularRegion) {
+        this._game.flipPieces(region)
     }
 
     setControlsEnabled(enable: boolean) {
@@ -97,7 +99,15 @@ export default class GameScreen implements IScreen {
     }
 
     private onClickFlipRegionButton = () => {
-        this._game.flipPieces(this._game.currentSelectedRegion!)
+        const currentRegion = this._game.currentSelectedRegion!
+
+        try {
+            this._game.flipPieces(currentRegion)
+            this._onFlipRegionCallback && this._onFlipRegionCallback(currentRegion)
+        } catch (e) {
+            // It's likely that the opponent is up to no good
+            console.error(e)
+        }
     }
 
     destroy(): void {

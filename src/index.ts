@@ -27,8 +27,8 @@ window.onload = function() {
     async function showCreateGameScreen() {
         const peer = new SimplePeer({ initiator: true, trickle: false })
 
-        const code = await getEncodedSignal(peer)
-        const createGameScreen = new CreateGameScreen(code)
+        const signal = await getEncodedSignal(peer)
+        const createGameScreen = new CreateGameScreen(signal)
         controller.showScreen(createGameScreen)
 
         createGameScreen.onSubmitFriendCode((friendCode) => {
@@ -64,14 +64,25 @@ window.onload = function() {
         const gameScreen = new GameScreen()
         controller.showScreen(gameScreen)
 
+        // Host moves first
         gameScreen.setControlsEnabled(session.isHost)
 
         gameScreen.onRegionSelected(region => {
             session.sendRegionSelectedEvent(region)
         })
 
+        gameScreen.onFlipPieces(region => {
+            session.sendPiecesFlippedEvent(region)
+            gameScreen.setControlsEnabled(false)
+        })
+
         session.onPlayerChangeSelectedRegion(region => {
             gameScreen.setSelectedRegion(region)
+        })
+
+        session.onPlayerFlipPieces(region => {
+            gameScreen.flipPieces(region)
+            gameScreen.setControlsEnabled(true)
         })
 
     }
@@ -80,7 +91,7 @@ window.onload = function() {
 }
 
 export async function getEncodedSignal(peer: SimplePeer.Instance): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
         peer.on("signal", data => {
             resolve(btoa(JSON.stringify(data)))
         })
