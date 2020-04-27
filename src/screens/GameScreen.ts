@@ -1,47 +1,53 @@
 import IScreen from "./IScreen"
-import FlippingGame from "../game/FlippingGame";
-import CanFlipRegion, {RuleBreaks} from "../game/CanFlipRegion";
+import FlippingGame from "../game/FlippingGame"
+import CanFlipRegion, { RuleBreaks } from "../game/CanFlipRegion"
+
+import OnlineGameSession from "../OnlineGameSession"
+
+import { Config } from "../game/types"
+
+const config: Config = {
+    n: 10,
+    colors: {
+        board: {
+            background: "#08f26e",
+            validSelection: "rgba(255, 255, 255, .5)",
+            invalidSelection: "rgba(218, 18, 18, .3)"
+        },
+        pieces: {
+            default: "#ffffff",
+            selected: "#cccccc",
+            flipped: "#000000"
+        }
+    },
+    sizes: {
+        cell: 100,
+        pieceDiameter: 90,
+        border: 2
+    }
+}
 
 export default class GameScreen implements IScreen {
     private readonly templateId: string = "game-screen-template"
 
-    render(container: HTMLElement): void {
-        const templateContents = document.getElementById(this.templateId)!.innerHTML
+    private game!: FlippingGame
 
-        container.innerHTML = templateContents
+    constructor(readonly session: OnlineGameSession) {
+    }
+
+    render(container: HTMLElement): void {
+        container.innerHTML = document.getElementById(this.templateId)!.innerHTML
 
         const canvas = document.getElementById("canvas") as HTMLCanvasElement
-
-        const game = new FlippingGame({
+        this.game = new FlippingGame(
             canvas,
-            n: 10,
-            colors: {
-                board: {
-                    background: "#08f26e",
-                    validSelection: "rgba(255, 255, 255, .5)",
-                    invalidSelection: "rgba(218, 18, 18, .3)"
-                },
-                pieces: {
-                    default: "#ffffff",
-                    selected: "#cccccc",
-                    flipped: "#000000"
-                }
-            },
-            sizes: {
-                cell: 100,
-                pieceDiameter: 90,
-                border: 2
-            }
-        })
+            config
+        )
 
-        const flipSelectedRegionBtn = document.getElementById("select-region-btn") as HTMLButtonElement
+        document.getElementById("flip-region-btn")!.addEventListener("click", this.onClickFlipRegionButton)
 
-        flipSelectedRegionBtn.onclick = () => {
-            game.flipPieces(game.currentSelectedRegion!)
-        }
-
-        game.onChangeSelectedRegion((region) => {
-            const ruleBreaks = new CanFlipRegion(game.pieces, region).check()
+        this.game.onChangeSelectedRegion((region) => {
+            const ruleBreaks = new CanFlipRegion(this.game.pieces, region).check()
 
             const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
             const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
@@ -63,6 +69,10 @@ export default class GameScreen implements IScreen {
                 ruleHeightMustBeTriangular.style.color = "red"
             }
         })
+    }
+
+    private onClickFlipRegionButton = () => {
+        this.game.flipPieces(this.game.currentSelectedRegion!)
     }
 
     destroy(): void {

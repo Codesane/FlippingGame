@@ -3,8 +3,11 @@ import ScreenController from "./ScreenController"
 import WelcomeScreen from "./screens/WelcomeScreen"
 import CreateGameScreen from "./screens/CreateGameScreen"
 import JoinGameScreen from "./screens/JoinGameScreen"
+import GameScreen from "./screens/GameScreen"
 
-import SimplePeer, {SignalData} from "simple-peer"
+import OnlineGameSession from "./OnlineGameSession"
+
+import SimplePeer from "simple-peer"
 
 import "./styles.css"
 
@@ -23,9 +26,6 @@ window.onload = function() {
 
     async function showCreateGameScreen() {
         const peer = new SimplePeer({ initiator: true, trickle: false })
-        peer.on("connect", () => {
-            console.log("We are connected")
-        })
 
         const code = await getEncodedSignal(peer)
         const createGameScreen = new CreateGameScreen(code)
@@ -34,16 +34,17 @@ window.onload = function() {
         createGameScreen.onSubmitFriendCode((friendCode) => {
             applyEncodedSignal(peer, friendCode)
         })
+
+        peer.on("connect", () => {
+            showGameScreen(new OnlineGameSession(peer, true))
+        })
     }
 
     function showJoinGameScreen() {
-        const peer = new SimplePeer()
-        peer.on("connect", () => {
-            console.log("Friend connected")
-        })
-
         const joinGameScreen = new JoinGameScreen()
         controller.showScreen(joinGameScreen)
+
+        const peer = new SimplePeer()
 
         joinGameScreen.onSubmitFriendCode(async (friendCode) => {
             applyEncodedSignal(peer, friendCode)
@@ -51,6 +52,15 @@ window.onload = function() {
             const signal = await getEncodedSignal(peer)
             joinGameScreen.displayMyGameCode(signal)
         })
+
+        peer.on("connect", () => {
+            showGameScreen(new OnlineGameSession(peer, false))
+        })
+    }
+
+    function showGameScreen(session: OnlineGameSession) {
+        const gameScreen = new GameScreen(session)
+        controller.showScreen(gameScreen)
     }
 
     showWelcomeScreen()

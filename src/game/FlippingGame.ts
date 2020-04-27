@@ -15,13 +15,13 @@ export default class FlippingGame {
 
     private _dragSelectionStart: Cell | null = null
 
-    constructor(readonly config: Config) {
-        this._ctx = config.canvas.getContext("2d")!
+    constructor(readonly canvas: HTMLCanvasElement, readonly config: Config) {
+        this._ctx = canvas.getContext("2d")!
         this._pieces = new PieceMap(config.n)
 
-        config.canvas.onmousedown = this.onMouseDown.bind(this)
-        config.canvas.onmouseup = this.onMouseUp.bind(this)
-        config.canvas.onmousemove = this.onMouseMove.bind(this)
+        canvas.onmousedown = this.onMouseDown.bind(this)
+        canvas.onmouseup = this.onMouseUp.bind(this)
+        canvas.onmousemove = this.onMouseMove.bind(this)
 
         this.draw()
     }

@@ -21,7 +21,6 @@ interface Sizes {
 export interface Config {
     colors: Colors
     sizes: Sizes
-    canvas: HTMLCanvasElement
     n: number
 }
 
