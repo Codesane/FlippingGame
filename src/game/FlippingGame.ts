@@ -3,6 +3,7 @@ import CanFlipRegion from "./CanFlipRegion"
 import PieceMap from "./PieceMap"
 
 import * as Utils from "./utils"
+import {areRegionsEqual} from "./utils";
 
 export type OnChangeSelectedRegion = (region: RectangularRegion) => void
 
@@ -14,6 +15,8 @@ export default class FlippingGame {
     private _onChangeSelectedRegionCb: OnChangeSelectedRegion | null = null
 
     private _dragSelectionStart: Cell | null = null
+
+    private _controlsEnabled: boolean = true
 
     constructor(readonly canvas: HTMLCanvasElement, readonly config: Config) {
         this._ctx = canvas.getContext("2d")!
@@ -36,6 +39,10 @@ export default class FlippingGame {
         this.removeCurrentSelection()
 
         this.draw()
+    }
+
+    set controlsEnabled(enable: boolean) {
+        this._controlsEnabled = enable
     }
 
     selectRegion(region: RectangularRegion) {
@@ -141,6 +148,8 @@ export default class FlippingGame {
     }
 
     private onMouseDown(e: MouseEvent) {
+        if (!this._controlsEnabled) return
+
         const canvasX = e.offsetX
         const canvasY = e.offsetY
 
@@ -149,11 +158,15 @@ export default class FlippingGame {
     }
 
     private onMouseMove(e: MouseEvent) {
+        if (!this._controlsEnabled) return
+
         this.updateSelection(e)
         this.draw()
     }
 
     private onMouseUp(e: MouseEvent) {
+        if (!this._controlsEnabled) return
+
         this.updateSelection(e)
 
         this._dragSelectionStart = null
@@ -170,9 +183,14 @@ export default class FlippingGame {
 
         if (this._dragSelectionStart) {
             const dragSelectionEnd = Utils.cellAtCoordinates(this.config.sizes.cell, canvasX, canvasY)
-            this._currentSelectedRegion = Utils.getRegionBetweenCells(this._dragSelectionStart!, dragSelectionEnd)
+            const newSelectedRegion = Utils.getRegionBetweenCells(this._dragSelectionStart!, dragSelectionEnd)
 
-            this._onChangeSelectedRegionCb && this._onChangeSelectedRegionCb(this._currentSelectedRegion)
+            // Only invoke the callback when the region has changed.
+            if (!this._currentSelectedRegion || !areRegionsEqual(this._currentSelectedRegion, newSelectedRegion)) {
+                this._onChangeSelectedRegionCb && this._onChangeSelectedRegionCb(newSelectedRegion)
+            }
+
+            this._currentSelectedRegion = newSelectedRegion
         }
     }
 }

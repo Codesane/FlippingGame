@@ -36,6 +36,7 @@ window.onload = function() {
         })
 
         peer.on("connect", () => {
+            // noinspection JSIgnoredPromiseFromCall
             showGameScreen(new OnlineGameSession(peer, true))
         })
     }
@@ -54,13 +55,25 @@ window.onload = function() {
         })
 
         peer.on("connect", () => {
+            // noinspection JSIgnoredPromiseFromCall
             showGameScreen(new OnlineGameSession(peer, false))
         })
     }
 
-    function showGameScreen(session: OnlineGameSession) {
-        const gameScreen = new GameScreen(session)
+    async function showGameScreen(session: OnlineGameSession) {
+        const gameScreen = new GameScreen()
         controller.showScreen(gameScreen)
+
+        gameScreen.setControlsEnabled(session.isHost)
+
+        gameScreen.onRegionSelected(region => {
+            session.sendRegionSelectedEvent(region)
+        })
+
+        session.onPlayerChangeSelectedRegion(region => {
+            gameScreen.setSelectedRegion(region)
+        })
+
     }
 
     showWelcomeScreen()

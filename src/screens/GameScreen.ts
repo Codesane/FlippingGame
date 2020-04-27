@@ -4,7 +4,7 @@ import CanFlipRegion, { RuleBreaks } from "../game/CanFlipRegion"
 
 import OnlineGameSession from "../OnlineGameSession"
 
-import { Config } from "../game/types"
+import {Config, RectangularRegion} from "../game/types"
 
 const config: Config = {
     n: 10,
@@ -27,52 +27,77 @@ const config: Config = {
     }
 }
 
+export type OnRegionSelected = (region: RectangularRegion) => void
+export type OnFlipRegion = (region: RectangularRegion) => void
+
 export default class GameScreen implements IScreen {
-    private readonly templateId: string = "game-screen-template"
+    private readonly _templateId: string = "game-screen-template"
 
-    private game!: FlippingGame
+    private _onRegionSelectedCallback: OnRegionSelected | null = null
+    private _onFlipRegionCallback: OnFlipRegion | null = null
 
-    constructor(readonly session: OnlineGameSession) {
-    }
+    private _game!: FlippingGame
 
     render(container: HTMLElement): void {
-        container.innerHTML = document.getElementById(this.templateId)!.innerHTML
+        container.innerHTML = document.getElementById(this._templateId)!.innerHTML
 
         const canvas = document.getElementById("canvas") as HTMLCanvasElement
-        this.game = new FlippingGame(
+        this._game = new FlippingGame(
             canvas,
             config
         )
 
         document.getElementById("flip-region-btn")!.addEventListener("click", this.onClickFlipRegionButton)
 
-        this.game.onChangeSelectedRegion((region) => {
-            const ruleBreaks = new CanFlipRegion(this.game.pieces, region).check()
+        this._game.onChangeSelectedRegion(this.onChangeSelectedRegion)
+    }
 
-            const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
-            const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
-            const ruleHeightMustBeTriangular = document.getElementById("rule-HeightMustBeTriangular")!
+    onRegionSelected(callback: OnRegionSelected) {
+        this._onRegionSelectedCallback = callback
+    }
 
-            ruleTopRightPieceMustNotBeFlippedElement.style.color = "#000"
-            ruleWidthMustBeSquare.style.color = "#000"
-            ruleHeightMustBeTriangular.style.color = "#000"
+    setSelectedRegion(region: RectangularRegion) {
+        this._game.selectRegion(region)
+    }
 
-            if (ruleBreaks.includes(RuleBreaks.TopRightPieceMustNotBeFlipped)) {
-                ruleTopRightPieceMustNotBeFlippedElement.style.color = "red"
-            }
+    onFlipRegion(callback: OnFlipRegion) {
+        this._onFlipRegionCallback = callback
+    }
 
-            if (ruleBreaks.includes(RuleBreaks.WidthMustBeSquare)) {
-                ruleWidthMustBeSquare.style.color = "red"
-            }
+    setControlsEnabled(enable: boolean) {
+        this._game.controlsEnabled = enable
+    }
 
-            if (ruleBreaks.includes(RuleBreaks.HeightMustBeTriangular)) {
-                ruleHeightMustBeTriangular.style.color = "red"
-            }
-        })
+    private onChangeSelectedRegion = (region: RectangularRegion) => {
+        const ruleBreaks = new CanFlipRegion(this._game.pieces, region).check()
+
+        const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
+        const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
+        const ruleHeightMustBeTriangular = document.getElementById("rule-HeightMustBeTriangular")!
+
+        ruleTopRightPieceMustNotBeFlippedElement.style.color = "#000"
+        ruleWidthMustBeSquare.style.color = "#000"
+        ruleHeightMustBeTriangular.style.color = "#000"
+
+        if (ruleBreaks.includes(RuleBreaks.TopRightPieceMustNotBeFlipped)) {
+            ruleTopRightPieceMustNotBeFlippedElement.style.color = "red"
+        }
+
+        if (ruleBreaks.includes(RuleBreaks.WidthMustBeSquare)) {
+            ruleWidthMustBeSquare.style.color = "red"
+        }
+
+        if (ruleBreaks.includes(RuleBreaks.HeightMustBeTriangular)) {
+            ruleHeightMustBeTriangular.style.color = "red"
+        }
+
+        if (ruleBreaks.length === 0) {
+            this._onRegionSelectedCallback && this._onRegionSelectedCallback(region)
+        }
     }
 
     private onClickFlipRegionButton = () => {
-        this.game.flipPieces(this.game.currentSelectedRegion!)
+        this._game.flipPieces(this._game.currentSelectedRegion!)
     }
 
     destroy(): void {

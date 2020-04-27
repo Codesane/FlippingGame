@@ -1,12 +1,5 @@
 import { Cell, RectangularRegion } from "./types"
 
-export function isInsideRegion(cell: Cell, region: RectangularRegion) {
-    const isWithinHorizontalBounds = cell.x >= region.topLeft.x && cell.x <= region.bottomRight.x
-    const isWithinVerticalBounds = cell.y >= region.topLeft.y && cell.y <= region.bottomRight.y
-
-    return isWithinHorizontalBounds && isWithinVerticalBounds
-}
-
 export function getRegionBetweenCells(first: Cell, second: Cell): RectangularRegion {
     return {
         topLeft: {
@@ -33,4 +26,11 @@ export function getRegionWidth(region: RectangularRegion): number {
 
 export function getRegionHeight(region: RectangularRegion): number {
     return region.bottomRight.y - region.topLeft.y + 1
+}
+
+export function areRegionsEqual(first: RectangularRegion, second: RectangularRegion): boolean {
+    return first.topLeft.x === second.topLeft.x &&
+        first.topLeft.y === second.topLeft.y &&
+        first.bottomRight.x === second.bottomRight.x &&
+        first.bottomRight.y === second.bottomRight.y
 }
