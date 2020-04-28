@@ -1,9 +1,9 @@
-import ScreenController from "./ScreenController"
+import ScreenController from "./ui/framework/ScreenController"
 
-import WelcomeScreen from "./screens/WelcomeScreen"
-import CreateGameScreen from "./screens/CreateGameScreen"
-import JoinGameScreen from "./screens/JoinGameScreen"
-import GameScreen from "./screens/GameScreen"
+import WelcomeScreen from "./ui/screens/WelcomeScreen"
+import CreateGameScreen from "./ui/screens/CreateGameScreen"
+import JoinGameScreen from "./ui/screens/JoinGameScreen"
+import GameScreen from "./ui/screens/GameScreen"
 
 import OnlineGameSession from "./OnlineGameSession"
 
@@ -13,7 +13,6 @@ import "./styles.css"
 
 window.onload = function() {
     const screenContainer = document.getElementById("main")!
-
     const controller = new ScreenController(screenContainer)
 
     function showWelcomeScreen() {

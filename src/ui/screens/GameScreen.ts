@@ -1,8 +1,8 @@
-import IScreen from "./IScreen"
-import FlippingGame from "../game/FlippingGame"
-import CanFlipRegion, { RuleBreaks } from "../game/CanFlipRegion"
+import BaseScreen from "../framework/BaseScreen"
+import FlippingGame from "../../game/FlippingGame"
+import CanFlipRegion, { RuleBreaks } from "../../game/CanFlipRegion"
 
-import { Config, RectangularRegion } from "../game/types"
+import { Config, RectangularRegion } from "../../game/types"
 
 const config: Config = {
     n: 10,
@@ -28,24 +28,26 @@ const config: Config = {
 export type OnRegionSelected = (region: RectangularRegion) => void
 export type OnFlipPieces = (region: RectangularRegion) => void
 
-export default class GameScreen implements IScreen {
-    private readonly _templateId: string = "game-screen-template"
-
+export default class GameScreen extends BaseScreen {
     private _onRegionSelectedCallback: OnRegionSelected | null = null
     private _onFlipRegionCallback: OnFlipPieces | null = null
 
     private _game!: FlippingGame
 
-    render(container: HTMLElement): void {
-        container.innerHTML = document.getElementById(this._templateId)!.innerHTML
+    constructor() {
+        super("game-screen-template")
+    }
 
-        const canvas = document.getElementById("canvas") as HTMLCanvasElement
+    render(container: HTMLElement): void {
+        super.render(container)
+
+        const canvas = this.getById<HTMLCanvasElement>("canvas")
         this._game = new FlippingGame(
             canvas,
             config
         )
 
-        document.getElementById("flip-region-btn")!.addEventListener("click", this.onClickFlipRegionButton)
+        this.onEvent("flip-region-btn", "click", this.onClickFlipRegionButton)
 
         this._game.onChangeSelectedRegion(this.onChangeSelectedRegion)
     }
@@ -73,9 +75,9 @@ export default class GameScreen implements IScreen {
     private onChangeSelectedRegion = (region: RectangularRegion) => {
         const ruleBreaks = new CanFlipRegion(this._game.pieces, region).check()
 
-        const ruleTopRightPieceMustNotBeFlippedElement = document.getElementById("rule-TopRightPieceMustNotBeFlipped")!
-        const ruleWidthMustBeSquare = document.getElementById("rule-WidthMustBeSquare")!
-        const ruleHeightMustBeTriangular = document.getElementById("rule-HeightMustBeTriangular")!
+        const ruleTopRightPieceMustNotBeFlippedElement = this.getById("rule-TopRightPieceMustNotBeFlipped")!
+        const ruleWidthMustBeSquare = this.getById("rule-WidthMustBeSquare")!
+        const ruleHeightMustBeTriangular = this.getById("rule-HeightMustBeTriangular")!
 
         ruleTopRightPieceMustNotBeFlippedElement.style.color = "#000"
         ruleWidthMustBeSquare.style.color = "#000"
