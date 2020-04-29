@@ -29,6 +29,6 @@ export default class JoinGameScreen extends BaseScreen {
     private onClickSubmitFriendCodeDelegate = () => {
         const friendCode = this.getById<HTMLInputElement>("join-game-friend-code-input").value
 
-        this._onSubmitFriendCodeCallback && this._onSubmitFriendCodeCallback(friendCode)
+        this._onSubmitFriendCodeCallback?.call(this, friendCode)
     }
 }

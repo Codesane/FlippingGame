@@ -27,10 +27,10 @@ export default class WelcomeScreen extends BaseScreen {
     }
 
     private onClickCreateNewGameDelegate = () => {
-        this._onCreateNewGameCallback && this._onCreateNewGameCallback()
+        this._onCreateNewGameCallback?.call(this)
     }
 
     private onClickJoinGameDelegate = () => {
-        this._onJoinGameCallback && this._onJoinGameCallback()
+        this._onJoinGameCallback?.call(this)
     }
 }

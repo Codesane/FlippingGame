@@ -45,7 +45,6 @@ export default class OnlineGameSession {
 
     private onReceiveMessage = (data: any) => {
         const message: IMessage = JSON.parse(data)
-        console.log(`Received message: `, message)
 
         switch(message.type) {
             case "RegionSelectedEvent":
@@ -58,11 +57,11 @@ export default class OnlineGameSession {
     }
 
     private handleRegionSelectedEvent(message: IMessage) {
-        this.onPlayerChangeSelectedRegionCallback && this.onPlayerChangeSelectedRegionCallback(message.body)
+        this.onPlayerChangeSelectedRegionCallback?.call(this, message.body)
     }
 
     private handlePiecesFlippedEvent(message: IMessage) {
-        this.onPlayerFlipPiecesCallback && this.onPlayerFlipPiecesCallback(message.body)
+        this.onPlayerFlipPiecesCallback?.call(this, message.body)
     }
 
     private sendMessage({ type, body }: IMessage) {

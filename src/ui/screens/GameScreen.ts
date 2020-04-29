@@ -30,7 +30,7 @@ export type OnFlipPieces = (region: RectangularRegion) => void
 
 export default class GameScreen extends BaseScreen {
     private _onRegionSelectedCallback: OnRegionSelected | null = null
-    private _onFlipRegionCallback: OnFlipPieces | null = null
+    private _onFlipPiecesCallback: OnFlipPieces | null = null
 
     private _game!: FlippingGame
 
@@ -61,7 +61,7 @@ export default class GameScreen extends BaseScreen {
     }
 
     onFlipPieces(callback: OnFlipPieces) {
-        this._onFlipRegionCallback = callback
+        this._onFlipPiecesCallback = callback
     }
 
     flipPieces(region: RectangularRegion) {
@@ -96,7 +96,7 @@ export default class GameScreen extends BaseScreen {
         }
 
         if (ruleBreaks.length === 0) {
-            this._onRegionSelectedCallback && this._onRegionSelectedCallback(region)
+            this._onRegionSelectedCallback?.call(this, region)
         }
     }
 
@@ -105,7 +105,7 @@ export default class GameScreen extends BaseScreen {
 
         try {
             this._game.flipPieces(currentRegion)
-            this._onFlipRegionCallback && this._onFlipRegionCallback(currentRegion)
+            this._onFlipPiecesCallback?.call(this, currentRegion)
         } catch (e) {
             // It's likely that the opponent is up to no good
             console.error(e)

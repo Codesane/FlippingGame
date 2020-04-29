@@ -3,7 +3,6 @@ import CanFlipRegion from "./CanFlipRegion"
 import PieceMap from "./PieceMap"
 
 import * as Utils from "./utils"
-import {areRegionsEqual} from "./utils";
 
 export type OnChangeSelectedRegion = (region: RectangularRegion) => void
 
@@ -12,7 +11,7 @@ export default class FlippingGame {
     private readonly _pieces: PieceMap
 
     private _currentSelectedRegion: RectangularRegion | null = null
-    private _onChangeSelectedRegionCb: OnChangeSelectedRegion | null = null
+    private _onChangeSelectedRegionCallback: OnChangeSelectedRegion | null = null
 
     private _dragSelectionStart: Cell | null = null
 
@@ -51,7 +50,7 @@ export default class FlippingGame {
     }
 
     onChangeSelectedRegion(callback: OnChangeSelectedRegion) {
-        this._onChangeSelectedRegionCb = callback
+        this._onChangeSelectedRegionCallback = callback
     }
 
     get currentSelectedRegion(): RectangularRegion | null {
@@ -186,8 +185,8 @@ export default class FlippingGame {
             const newSelectedRegion = Utils.getRegionBetweenCells(this._dragSelectionStart!, dragSelectionEnd)
 
             // Only invoke the callback when the region has changed.
-            if (!this._currentSelectedRegion || !areRegionsEqual(this._currentSelectedRegion, newSelectedRegion)) {
-                this._onChangeSelectedRegionCb && this._onChangeSelectedRegionCb(newSelectedRegion)
+            if (!this._currentSelectedRegion || !Utils.areRegionsEqual(this._currentSelectedRegion, newSelectedRegion)) {
+                this._onChangeSelectedRegionCallback?.call(this, newSelectedRegion)
             }
 
             this._currentSelectedRegion = newSelectedRegion
