@@ -5,7 +5,7 @@ import CanFlipRegion, { RuleBreaks } from "../../game/CanFlipRegion"
 import { Config, RectangularRegion } from "../../game/types"
 
 const config: Config = {
-    n: 10,
+    sideLength: 10,
     colors: {
         board: {
             background: "#08f26e",

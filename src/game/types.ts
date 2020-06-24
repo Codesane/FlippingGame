@@ -21,7 +21,7 @@ interface Sizes {
 export interface Config {
     colors: Colors
     sizes: Sizes
-    n: number
+    sideLength: number
 }
 
 export interface Cell {

@@ -56,12 +56,12 @@ export default class CanFlipRegion implements ICanFlipRegion {
     }
 
     private isWidthPerfectSquare() {
-        return Utils.getRegionWidth(this.region) != 2 && Number.isInteger(Math.sqrt(Utils.getRegionWidth(this.region)))
+        let width = Utils.getRegionWidth(this.region)
+        return width != 2 && Number.isInteger(Math.sqrt(width))
     }
 
     private isHeightTriangular() {
         const height = Utils.getRegionHeight(this.region)
-
         return Number.isInteger(Math.sqrt(8 * height + 1))
     }
 }

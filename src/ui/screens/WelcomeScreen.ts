@@ -5,7 +5,7 @@ export type OnJoinGame = () => void
 
 export default class WelcomeScreen extends BaseScreen {
     private _onCreateNewGameCallback: OnCreateNewGame | null = null
-    private _onJoinGameCallback: OnCreateNewGame | null = null
+    private _onJoinGameCallback: OnJoinGame | null = null
 
     constructor() {
         super("welcome-screen-template")

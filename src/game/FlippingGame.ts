@@ -19,7 +19,7 @@ export default class FlippingGame {
 
     constructor(readonly canvas: HTMLCanvasElement, readonly config: Config) {
         this._ctx = canvas.getContext("2d")!
-        this._pieces = new PieceMap(config.n)
+        this._pieces = new PieceMap(config.sideLength)
 
         canvas.onmousedown = this.onMouseDown.bind(this)
         canvas.onmouseup = this.onMouseUp.bind(this)
@@ -71,14 +71,14 @@ export default class FlippingGame {
         this._ctx.strokeStyle = this.config.colors.board.background
 
         const cellSize = this.config.sizes.cell
-        const width = this.config.n * cellSize
-        const height = this.config.n * cellSize
+        const width = this.config.sideLength * cellSize
+        const height = this.config.sideLength * cellSize
 
         this._ctx.fillStyle = this.config.colors.board.background
         this._ctx.fillRect(0, 0, width, height)
 
         // Draw the vertical lines perpendicular to the x-axis
-        for (let vx = 0; vx < this.config.n; vx++) {
+        for (let vx = 0; vx < this.config.sideLength; vx++) {
             this._ctx.beginPath()
             this._ctx.moveTo(vx * cellSize, 0)
             this._ctx.lineTo(vx * cellSize, height)
@@ -87,7 +87,7 @@ export default class FlippingGame {
         }
 
         // Draw the horizontal lines perpendicular to the y-axis
-        for (let hy = 0; hy < this.config.n; hy++) {
+        for (let hy = 0; hy < this.config.sideLength; hy++) {
             this._ctx.beginPath()
             this._ctx.moveTo(0, hy * cellSize)
             this._ctx.lineTo(width, hy * cellSize)
@@ -101,8 +101,8 @@ export default class FlippingGame {
         const pieceDiameter = this.config.sizes.pieceDiameter
 
         // Draw the pieces for all cells
-        for (let y = 0; y < this.config.n; y++) {
-            for (let x = 0; x < this.config.n; x++) {
+        for (let y = 0; y < this.config.sideLength; y++) {
+            for (let x = 0; x < this.config.sideLength; x++) {
                 const piece = this._pieces.getPiece({ x, y })
 
                 this._ctx.beginPath()
