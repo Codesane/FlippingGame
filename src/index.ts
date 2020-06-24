@@ -2,7 +2,6 @@ import ScreenController from "./ui/framework/ScreenController"
 
 import WelcomeScreen from "./ui/screens/WelcomeScreen"
 import CreateGameScreen from "./ui/screens/CreateGameScreen"
-import JoinGameScreen from "./ui/screens/JoinGameScreen"
 import GameScreen from "./ui/screens/GameScreen"
 
 import OnlineGameSession from "./OnlineGameSession"
@@ -20,7 +19,9 @@ window.onload = function() {
         controller.showScreen(welcomeScreen)
 
         welcomeScreen.onCreateNewGame(showCreateGameScreen)
-        welcomeScreen.onJoinGame(showJoinGameScreen)
+        welcomeScreen.onCreateOnlineGame(() => {
+            alert("TODO")
+        })
     }
 
     async function showCreateGameScreen() {
@@ -37,25 +38,6 @@ window.onload = function() {
         peer.on("connect", () => {
             // noinspection JSIgnoredPromiseFromCall
             showGameScreen(new OnlineGameSession(peer, true))
-        })
-    }
-
-    function showJoinGameScreen() {
-        const joinGameScreen = new JoinGameScreen()
-        controller.showScreen(joinGameScreen)
-
-        const peer = new SimplePeer()
-
-        joinGameScreen.onSubmitFriendCode(async (friendCode) => {
-            applyEncodedSignal(peer, friendCode)
-
-            const signal = await getEncodedSignal(peer)
-            joinGameScreen.displayMyGameCode(signal)
-        })
-
-        peer.on("connect", () => {
-            // noinspection JSIgnoredPromiseFromCall
-            showGameScreen(new OnlineGameSession(peer, false))
         })
     }
 

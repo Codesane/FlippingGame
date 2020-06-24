@@ -1,11 +1,11 @@
 import BaseScreen from "../framework/BaseScreen"
 
 export type OnCreateNewGame = () => void
-export type OnJoinGame = () => void
+export type OnCreateOnlineGame = () => void
 
 export default class WelcomeScreen extends BaseScreen {
     private _onCreateNewGameCallback: OnCreateNewGame | null = null
-    private _onJoinGameCallback: OnJoinGame | null = null
+    private _onClickCreateOnlineGameCallback: OnCreateOnlineGame | null = null
 
     constructor() {
         super("welcome-screen-template")
@@ -14,23 +14,24 @@ export default class WelcomeScreen extends BaseScreen {
     render(container: HTMLElement): void {
         super.render(container)
 
+        // TODO: Use RxJava for callbacks, it's quite clean :)
         this.onEvent("new-game", "click", this.onClickCreateNewGameDelegate)
-        this.onEvent("join-game", "click", this.onClickJoinGameDelegate)
+        this.onEvent("new-online-game", "click", this.onClickCreateOnlineGame)
     }
 
     onCreateNewGame(callback: OnCreateNewGame) {
         this._onCreateNewGameCallback = callback
     }
 
-    onJoinGame(callback: OnJoinGame) {
-        this._onJoinGameCallback = callback
+    onCreateOnlineGame(callback: OnCreateOnlineGame) {
+        this._onClickCreateOnlineGameCallback = callback
     }
 
     private onClickCreateNewGameDelegate = () => {
         this._onCreateNewGameCallback?.call(this)
     }
 
-    private onClickJoinGameDelegate = () => {
-        this._onJoinGameCallback?.call(this)
+    private onClickCreateOnlineGame = () => {
+        this._onClickCreateOnlineGameCallback?.call(this)
     }
 }
